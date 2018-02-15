@@ -25,10 +25,13 @@ Once you have the clientId/clientSecret, and the accepted redirect url (like htt
       </extension>
     </component>
 
-Keycloak:
+## Sample configuration for Google Keycloak :
+
 Declare in "templates/openid/nuxeo.defaults"
 
 nuxeo.openid.keycloak.client.id=
+
+
 nuxeo.openid.keycloak.secret.id=
 
 
