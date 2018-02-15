@@ -43,7 +43,6 @@ Change definition resources/OSGI-INF/openid-keycloak-contrib.xml
 		    <tokenServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token</tokenServerURL>
 		    <userInfoURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo</userInfoURL>
 		    <scope>openid</scope>
-		    <icon>/img/amazon_icon.png</icon>
 		    <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.DefaultOpenIDUserInfo</userInfoClass>
 		</provider>
 	    </extension>
