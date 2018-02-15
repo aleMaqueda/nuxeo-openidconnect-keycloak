@@ -83,7 +83,7 @@ nuxeo.openid.keycloak.client.id=${nuxeo-client}
 
 nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
 
-Reemplace nuxeo-platform-login-openid-9.2.jar in:
+Replace nuxeo-platform-login-openid-9.2.jar in:
 
 - nxserver/bundles
 
