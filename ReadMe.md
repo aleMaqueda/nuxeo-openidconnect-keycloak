@@ -27,6 +27,30 @@ Once you have the clientId/clientSecret, and the accepted redirect url (like htt
 
 ## Sample configuration for Keycloak (3.3.0):
 
+In actual plugin:
+
+Change definition resources/OSGI-INF/openid-keycloak-contrib.xml
+
+	<?xml version="1.0"?>
+	<component name="org.nuxeo.ecm.platform.oauth2.openid.keycloak" version="1.0">
+	    <requires>org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry</requires>
+	    <extension target="org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry" point="providers">
+		<provider>
+		    <name>keycloak</name>
+		    <label>keycloak</label>
+		    <description>Login using your keycloak account</description>
+		    <authorizationServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth</authorizationServerURL>
+		    <tokenServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token</tokenServerURL>
+		    <userInfoURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo</userInfoURL>
+		    <scope>openid</scope>
+		    <icon>/img/amazon_icon.png</icon>
+		    <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.DefaultOpenIDUserInfo</userInfoClass>
+		</provider>
+	    </extension>
+	</component>
+
+In nuxeo server:
+
 Declare in "templates/openid/nuxeo.defaults"
 
 nuxeo.openid.keycloak.client.id=
@@ -53,34 +77,9 @@ packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-
       </extension>
     </#if>
 
-
 In "nuxeo.conf" and "nxserver/config/configuration.properties":
 
 nuxeo.openid.keycloak.client.id=${nuxeo-client}
 
 nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
-
-
-Change definition resources/OSGI-INF/openid-keycloak-contrib.xml
-
-	<?xml version="1.0"?>
-	<component name="org.nuxeo.ecm.platform.oauth2.openid.keycloak" version="1.0">
-	    <requires>org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry</requires>
-	    <extension target="org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProviderRegistry" point="providers">
-		<provider>
-		    <name>ConnectKeycloak</name>
-		    <label>keycloak</label>
-		    <description>Login using your keycloak account</description>
-		    <authorizationServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/auth</authorizationServerURL>
-		    <tokenServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token</tokenServerURL>
-		    <userInfoURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo</userInfoURL>
-		    <scope>openid</scope>
-		    <icon>/img/amazon_icon.png</icon>
-		    <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.DefaultOpenIDUserInfo</userInfoClass>
-		</provider>
-	    </extension>
-	</component>
-
-Review: userInfoURL OpenIdConnectProvider class -> temporal hardcode (doesn't map userInfoURL)
-
 
