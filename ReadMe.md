@@ -1,5 +1,5 @@
 
-## About nuxeo-platform-login-openid
+## About nuxeo-platform-login-openid 9.2
 
 This module contribute a new Login Plugin that can use OpenId to authenticate the user.
 
@@ -25,7 +25,7 @@ Once you have the clientId/clientSecret, and the accepted redirect url (like htt
       </extension>
     </component>
 
-## Sample configuration for Google Keycloak :
+## Sample configuration for Keycloak (3.3.0):
 
 Declare in "templates/openid/nuxeo.defaults"
 
