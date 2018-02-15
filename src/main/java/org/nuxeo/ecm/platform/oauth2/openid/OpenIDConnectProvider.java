@@ -234,9 +234,6 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
         log.info(accessToken);
         log.info(userInfoURL);
         log.info(oauth2Provider.getServiceName());
-        if(oauth2Provider.getServiceName().equals("keycloak")){
-            userInfoURL = "http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo";
-        }
         GenericUrl url = new GenericUrl(userInfoURL);
         log.info(userInfoURL);
         log.info(url);
