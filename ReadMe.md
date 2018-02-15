@@ -9,19 +9,6 @@ OpenId providers links will added to the login screen.
 
 You must first declare your Nuxeo Web Application to Google so that you can get the clientId and ClientSecret.
 
-templates/openid/config/openid-login-config.xml.nxftl
-packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-config.xml.nxftl
-
-Declare in "templates/openid/nuxeo.defaults"
-
-nuxeo.openid.keycloak.client.id=
-nuxeo.openid.keycloak.secret.id=
-
-
-In "nuxeo.conf" and "nxserver/config/configuration.properties":
-nuxeo.openid.keycloak.client.id=${nuxeo-client}
-nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
-
 For that, go to https://code.google.com/apis/console > API Access > Create > Web Application
 
 Once you have the clientId/clientSecret, and the accepted redirect url (like http://demo.nuxeo.com/nuxeo/nxstartup.faces?provider=GoogleOpenIDConnect&forceAnonymousLogin=true) create `nxserver/config/openid-config.xml`
@@ -39,6 +26,16 @@ Once you have the clientId/clientSecret, and the accepted redirect url (like htt
     </component>
 
 Keycloak:
+Declare in "templates/openid/nuxeo.defaults"
+
+nuxeo.openid.keycloak.client.id=
+nuxeo.openid.keycloak.secret.id=
+
+
+You must first declare your Nuxeo Web Application to Keycloak so that you can get the clientId and ClientSecret.
+
+templates/openid/config/openid-login-config.xml.nxftl
+packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-config.xml.nxftl
 
     <#if "${nuxeo.openid.keycloak.client.id}" != "">
       <require>org.nuxeo.ecm.platform.oauth2.openid.keycloak</require>
@@ -50,6 +47,12 @@ Keycloak:
         </provider>
       </extension>
     </#if>
+
+
+In "nuxeo.conf" and "nxserver/config/configuration.properties":
+nuxeo.openid.keycloak.client.id=${nuxeo-client}
+nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
+
 
 Change definition resources/OSGI-INF/openid-keycloak-contrib.xml
 
