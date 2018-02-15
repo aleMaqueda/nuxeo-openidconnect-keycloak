@@ -38,7 +38,9 @@ nuxeo.openid.keycloak.secret.id=
 You must first declare your Nuxeo Web Application to Keycloak so that you can get the clientId and ClientSecret.
 
 templates/openid/config/openid-login-config.xml.nxftl
+
 packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-config.xml.nxftl
+
 
     <#if "${nuxeo.openid.keycloak.client.id}" != "">
       <require>org.nuxeo.ecm.platform.oauth2.openid.keycloak</require>
@@ -53,7 +55,9 @@ packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-
 
 
 In "nuxeo.conf" and "nxserver/config/configuration.properties":
+
 nuxeo.openid.keycloak.client.id=${nuxeo-client}
+
 nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
 
 
