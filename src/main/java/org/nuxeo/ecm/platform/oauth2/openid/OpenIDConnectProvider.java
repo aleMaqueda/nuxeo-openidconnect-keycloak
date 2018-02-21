@@ -211,10 +211,14 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
                 JSON_FACTORY)));
 
         GenericUrl url = new GenericUrl(userInfoURL);
-        url.set(accessTokenKey, accessToken);
-
+        if( ! oauth2Provider.getServiceName().equals("keycloak")) {
+            url.set(accessTokenKey, accessToken);
+        }
         try {
             HttpRequest request = requestFactory.buildGetRequest(url);
+            if(oauth2Provider.getServiceName().equals("keycloak")){
+                request.getHeaders().setAuthorization("Bearer "+accessToken);
+            }
             HttpResponse response = request.execute();
             String body = IOUtils.toString(response.getContent(), "UTF-8");
             log.debug(body);

@@ -10,5 +10,6 @@ Nuxeo-Component: OSGI-INF/auth-contrib.xml,
  OSGI-INF/openid-facebook-contrib.xml,
  OSGI-INF/openid-github-contrib.xml,
  OSGI-INF/openid-linkedin-contrib.xml,
- OSGI-INF/openid-amazon-contrib.xml
+ OSGI-INF/openid-amazon-contrib.xml,
+ OSGI-INF/openid-keycloak-contrib.xml
 Bundle-SymbolicName: org.nuxeo.ecm.platform.login.openid;singleton:=true
