@@ -50,9 +50,7 @@ public class EmailBasedUserResolver extends UserResolver {
 
     @Override
     public String findNuxeoUser(OpenIDUserInfo userInfo) {
-        log.info(userInfo.getEmail());
-        log.info(userInfo.getName());
-        log.info(userInfo.toString());
+
         try {
             UserManager userManager = Framework.getLocalService(UserManager.class);
             Map<String, Serializable> query = new HashMap<String, Serializable>();

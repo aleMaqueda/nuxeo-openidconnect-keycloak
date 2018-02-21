@@ -90,7 +90,6 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
     public OpenIDConnectProvider(OAuth2ServiceProvider oauth2Provider, String accessTokenKey, String userInfoURL,
             Class<? extends OpenIDUserInfo> openIdUserInfoClass, String icon, boolean enabled,
             RedirectUriResolver redirectUriResolver, Class<? extends UserResolver> userResolverClass, String userMapper) {
-
         this.oauth2Provider = oauth2Provider;
         this.userInfoURL = userInfoURL;
         this.openIdUserInfoClass = openIdUserInfoClass;
@@ -98,11 +97,7 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
         this.enabled = enabled;
         this.accessTokenKey = accessTokenKey;
         this.redirectUriResolver = redirectUriResolver;
-        log.info("verificacion de userInfoURL");
-        log.info(userInfoURL);
-        log.info(accessTokenKey);
-        log.info(oauth2Provider.getServiceName());
-        log.info(openIdUserInfoClass);
+
         try {
             if (userResolverClass == null) {
                 if (userMapper != null) {
@@ -141,22 +136,6 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
      * @param HttpServletRequest request
      */
     public boolean verifyStateToken(HttpServletRequest request) {
-        log.info(request.getServerName());
-        log.info(request.getAuthType());
-        log.info(request);
-        log.info("comparacion");
-        log.info(request.getSession().getAttribute(
-                OpenIDConnectAuthenticator.STATE_SESSION_ATTRIBUTE + "_" + getName()));
-        log.info(OpenIDConnectAuthenticator.STATE_URL_PARAM_NAME);
-        log.info("fin comparacion");
-        log.info(request.getAuthType());
-        log.info(request.getQueryString());
-        log.info(request.toString());
-        log.info(request.getContextPath());
-        log.info(request.getPathInfo());
-        log.info(request.getUserPrincipal());
-        log.info(request.getParameterNames().toString());
-        log.info(request.getRemoteUser());
         return request.getParameter(OpenIDConnectAuthenticator.STATE_URL_PARAM_NAME)
                       .equals(request.getSession().getAttribute(
                               OpenIDConnectAuthenticator.STATE_SESSION_ATTRIBUTE + "_" + getName()));
@@ -231,23 +210,12 @@ public class OpenIDConnectProvider implements LoginProviderLinkComputer {
         HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(new JsonObjectParser(
                 JSON_FACTORY)));
 
-        log.info(accessToken);
-        log.info(userInfoURL);
-        log.info(oauth2Provider.getServiceName());
         GenericUrl url = new GenericUrl(userInfoURL);
-        log.info(userInfoURL);
-        log.info(url);
-        if(! oauth2Provider.getServiceName().equals("keycloak")){
-            url.set(accessTokenKey, accessToken);
-        }
+        url.set(accessTokenKey, accessToken);
+
         try {
             HttpRequest request = requestFactory.buildGetRequest(url);
-            if(oauth2Provider.getServiceName().equals("keycloak")){
-                request.getHeaders().setAuthorization("Bearer " + accessToken);
-            }
             HttpResponse response = request.execute();
-            log.info(response.getStatusCode());
-            log.info(response.getStatusMessage());
             String body = IOUtils.toString(response.getContent(), "UTF-8");
             log.debug(body);
             userInfo = parseUserInfo(body);
