@@ -36,6 +36,8 @@ public abstract class UserResolver {
 
     private OpenIDConnectProvider provider;
 
+    protected static String userSchemaName = "user";
+
     public UserResolver(OpenIDConnectProvider provider) {
         this.provider = provider;
     }
@@ -66,13 +68,34 @@ public abstract class UserResolver {
     }
 
     protected abstract DocumentModel updateUserInfo(DocumentModel user, OpenIDUserInfo userInfo);
+    private DocumentModel updateUser(DocumentModel userDoc, OpenIDUserInfo userInfo) {
+        log.info(provider.getName());
+        try {
+            if(provider.getName().equals("keycloak")){
+                UserManager userManager = Framework.getLocalService(UserManager.class);
+                userDoc.setProperty(userSchemaName, "firstName", userInfo.getGivenName());
+                userDoc.setProperty(userSchemaName, "lastName", userInfo.getFamilyName());
+                userManager.updateUser(userDoc);
+            }
+        } catch (NuxeoException e) {
+            log.error("Error while update user " + "in UserManager", e);
+            return null;
+        }
 
+        return userDoc;
+    }
     public String findOrCreateNuxeoUser(OpenIDUserInfo userInfo) {
         String user = findNuxeoUser(userInfo);
         if (user == null) {
-            user = generateRandomUserId();
+
+            if(userInfo.getEmail() == null || userInfo.getEmail().trim().isEmpty()){
+                user = generateRandomUserId();
+            }else{
+                user = userInfo.getEmail();
+            }
             DocumentModel userDoc = createNuxeoUser(user);
             updateUserInfo(userDoc, userInfo);
+            updateUser(userDoc,userInfo);
         }
         return user;
     }
