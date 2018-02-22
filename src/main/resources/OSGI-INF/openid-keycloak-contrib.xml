@@ -10,7 +10,7 @@
             <tokenServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token</tokenServerURL>
             <userInfoURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo</userInfoURL>
             <scope>openid</scope>
-            <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.DefaultOpenIDUserInfo</userInfoClass>
+            <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.keycloak.KeycloakUserInfo</userInfoClass>
         </provider>
     </extension>
 </component>
