@@ -20,6 +20,7 @@
 package org.nuxeo.ecm.platform.oauth2.openid.auth;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * UserInfo Claims. OpenID Connect Basic Client Profile 1.0 - draft 24
@@ -88,4 +89,7 @@ public interface OpenIDUserInfo {
     /** @return Time the End-User's information was last updated. */
     Date getUpdatedTime();
 
+    List<String> getGroups();
+
+    List<String> getRoles();
 }

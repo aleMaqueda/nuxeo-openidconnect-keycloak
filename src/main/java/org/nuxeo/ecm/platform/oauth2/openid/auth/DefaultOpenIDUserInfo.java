@@ -21,6 +21,8 @@
 package org.nuxeo.ecm.platform.oauth2.openid.auth;
 
 import java.util.Date;
+import java.util.List;
+
 import com.google.api.client.json.GenericJson;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.Key;
@@ -83,6 +85,12 @@ public class DefaultOpenIDUserInfo extends GenericJson implements OpenIDUserInfo
 
     @Key("updated_time")
     protected String updatedTime;
+
+    @Key("groups")
+    protected List<String> groups;
+
+    @Key("roles")
+    protected List<String> roles;
 
     @Override
     public String getSubject() {
@@ -184,6 +192,15 @@ public class DefaultOpenIDUserInfo extends GenericJson implements OpenIDUserInfo
             return null;
         }
         return date;
+    }
+    @Override
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
     }
 
 }

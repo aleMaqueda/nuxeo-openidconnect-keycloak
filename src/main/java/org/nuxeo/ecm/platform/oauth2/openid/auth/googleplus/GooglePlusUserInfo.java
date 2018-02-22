@@ -46,6 +46,11 @@ public class GooglePlusUserInfo extends GenericJson implements OpenIDUserInfo {
     @Key("gender")
     protected String gender;
 
+    @Key("groups")
+    protected List<String> groups;
+
+    @Key("roles")
+    protected List<String> roles;
     @Override
     public String getSubject() {
         return id;
@@ -149,5 +154,14 @@ public class GooglePlusUserInfo extends GenericJson implements OpenIDUserInfo {
 
     protected List<ArrayMap<String, Object>> getEmailsObject() {
         return (List<ArrayMap<String, Object>>) get("emails");
+    }
+    @Override
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
     }
 }

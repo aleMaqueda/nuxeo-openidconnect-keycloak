@@ -1,13 +1,21 @@
 <?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+<xs:schema xmlns:nxs="http://nuxeo.org/schemas/openid/userinfo"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://nuxeo.org/schemas/openid/userinfo">
+
+  <xs:complexType name="stringList">
+    <xs:sequence>
+      <xs:element name="item" type="xs:string" minOccurs="0"
+                  maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
 
   <!-- subject@provider -->
   <xs:element name="id" type="xs:string" />
 
   <xs:element name="nuxeoLogin" type="xs:string" />
   <xs:element name="provider" type="xs:string" />
-  
+
   <!-- OpenID Connect Standard Claims -->
   <xs:element name="subject" type="xs:string"/>
   <xs:element name="name" type="xs:string"/>
@@ -28,5 +36,7 @@
   <xs:element name="phone_number" type="xs:string"/>
   <xs:element name="address" type="xs:string"/>
   <xs:element name="updated_time" type="xs:date"/>
+  <xs:element name="groups" type="nxs:stringList"/>
+  <xs:element name="roles" type="nxs:stringList"/>
 
 </xs:schema>

@@ -86,7 +86,8 @@ public class OpenIDUserInfoStoreImpl implements OpenIDUserInfoStore {
             data.put("phone_number", userInfo.getPhoneNumber());
             data.put("address", userInfo.getAddress());
             data.put("updated_time", userInfo.getUpdatedTime());
-
+            data.put("groups", userInfo.getGroups());
+            data.put("roles", userInfo.getRoles());
             if (session.hasEntry(userInfoId)) {
                 DocumentModel userInfoDoc = session.getEntry(userInfoId);
                 userInfoDoc.setProperties(SCHEMA_NAME, data);

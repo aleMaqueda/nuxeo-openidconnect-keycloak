@@ -96,6 +96,12 @@ public class LinkedInUserInfo extends GenericJson implements OpenIDUserInfo {
     @Key("updated_time")
     protected Date updatedTime;
 
+    @Key("groups")
+    protected List<String> groups;
+
+    @Key("roles")
+    protected List<String> roles;
+
     @Override
     public String getSubject() {
         return subject;
@@ -192,5 +198,15 @@ public class LinkedInUserInfo extends GenericJson implements OpenIDUserInfo {
     @Override
     public Date getUpdatedTime() {
         return updatedTime;
+    }
+
+    @Override
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
     }
 }

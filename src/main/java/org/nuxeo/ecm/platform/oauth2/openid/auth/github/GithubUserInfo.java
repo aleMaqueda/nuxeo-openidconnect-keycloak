@@ -19,6 +19,7 @@
 package org.nuxeo.ecm.platform.oauth2.openid.auth.github;
 
 import java.util.Date;
+import java.util.List;
 
 import org.nuxeo.ecm.platform.oauth2.openid.auth.OpenIDUserInfo;
 
@@ -100,6 +101,11 @@ public class GithubUserInfo extends GenericJson implements OpenIDUserInfo {
     @Key
     protected String company;
 
+    @Key("groups")
+    protected List<String> groups;
+
+    @Key("roles")
+    protected List<String> roles;
     @Override
     public String getSubject() {
         return getEmail();
@@ -228,5 +234,15 @@ public class GithubUserInfo extends GenericJson implements OpenIDUserInfo {
         } else {
             return strings[index];
         }
+    }
+
+    @Override
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    @Override
+    public List<String> getRoles() {
+        return roles;
     }
 }
