@@ -19,12 +19,16 @@
  */
 package org.nuxeo.ecm.platform.oauth2.openid.auth;
 
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.platform.oauth2.openid.OpenIDConnectProvider;
 import org.nuxeo.ecm.platform.usermanager.UserManager;
@@ -38,6 +42,8 @@ public abstract class UserResolver {
 
     protected static String userSchemaName = "user";
 
+    protected static String groupSchemaName = "group";
+
     public UserResolver(OpenIDConnectProvider provider) {
         this.provider = provider;
     }
@@ -48,11 +54,11 @@ public abstract class UserResolver {
 
     protected abstract String findNuxeoUser(OpenIDUserInfo userInfo);
 
-    protected  DocumentModel createNuxeoUser(String nuxeoLogin) {
+    protected  DocumentModel createNuxeoUser(String nuxeoLogin, UserManager userManager) {
         DocumentModel userDoc;
 
         try {
-            UserManager userManager = Framework.getLocalService(UserManager.class);
+            //UserManager userManager = Framework.getLocalService(UserManager.class);
 
             userDoc = userManager.getBareUserModel();
             userDoc.setPropertyValue(userManager.getUserIdField(), nuxeoLogin);
@@ -68,15 +74,19 @@ public abstract class UserResolver {
     }
 
     protected abstract DocumentModel updateUserInfo(DocumentModel user, OpenIDUserInfo userInfo);
-    private DocumentModel updateUser(DocumentModel userDoc, OpenIDUserInfo userInfo) {
+    private DocumentModel updateUser(DocumentModel userDoc, OpenIDUserInfo userInfo, UserManager userManager) {
         log.info(provider.getName());
         try {
-            if(provider.getName().equals("keycloak")){
-                UserManager userManager = Framework.getLocalService(UserManager.class);
-                userDoc.setProperty(userSchemaName, "firstName", userInfo.getGivenName());
-                userDoc.setProperty(userSchemaName, "lastName", userInfo.getFamilyName());
-                userManager.updateUser(userDoc);
-            }
+            log.debug(userInfo.getName());
+            log.info(userInfo.getGivenName());
+            log.info(userInfo.getGroups().toArray().length);
+            log.info(userInfo.getRoles().toArray().length);
+            //UserManager userManager = Framework.getLocalService(UserManager.class);
+            userDoc.setProperty(userSchemaName, "firstName", userInfo.getGivenName());
+            userDoc.setProperty(userSchemaName, "lastName", userInfo.getFamilyName());
+            userDoc.setProperty(userSchemaName, "groups", userInfo.getGroups());
+            userManager.updateUser(userDoc); // create workspace with firstname lastname
+
         } catch (NuxeoException e) {
             log.error("Error while update user " + "in UserManager", e);
             return null;
@@ -86,6 +96,8 @@ public abstract class UserResolver {
     }
     public String findOrCreateNuxeoUser(OpenIDUserInfo userInfo) {
         String user = findNuxeoUser(userInfo);
+
+        UserManager userManager = Framework.getLocalService(UserManager.class);
         if (user == null) {
 
             if(userInfo.getEmail() == null || userInfo.getEmail().trim().isEmpty()){
@@ -93,13 +105,58 @@ public abstract class UserResolver {
             }else{
                 user = userInfo.getEmail();
             }
-            DocumentModel userDoc = createNuxeoUser(user);
+            if(provider.getName().equals("keycloak")){
+                for (String group : userInfo.getGroups()) {
+                    log.info(group);
+                    findOrCreateGroup(group,userInfo.getName(),userManager);
+                }
+            }
+            DocumentModel userDoc = createNuxeoUser(user, userManager);
             updateUserInfo(userDoc, userInfo);
-            updateUser(userDoc,userInfo);
+            if(provider.getName().equals("keycloak")){
+                updateUser(userDoc,userInfo, userManager);
+            }
         }
         return user;
     }
+    private DocumentModel findOrCreateGroup(String group, String userName, UserManager userManager) {
+        DocumentModel groupDoc = findGroup(group, userManager);
 
+        if (groupDoc == null) {
+            groupDoc = userManager.getBareGroupModel();
+            groupDoc.setPropertyValue(userManager.getGroupIdField(), group);
+            groupDoc.setProperty(groupSchemaName, "groupname", group);
+            groupDoc.setProperty(groupSchemaName, "grouplabel", group);
+            groupDoc.setProperty(groupSchemaName, "description",
+                    "Group automatically created by Keycloak based on user group [" + group + "]");
+            groupDoc = userManager.createGroup(groupDoc);
+        }
+        List<String> users = userManager.getUsersInGroupAndSubGroups(group);
+        if (!users.contains(userName)) {
+            log.info("insert user to group");
+            users.add(userName);
+            groupDoc.setProperty(groupSchemaName, userManager.getGroupMembersField(), users);
+            userManager.updateGroup(groupDoc);
+        }
+        log.info(groupDoc.getName());
+        log.info(groupDoc.getId());
+        log.info(groupDoc.toString());
+        return groupDoc;
+    }
+    private DocumentModel findGroup(String group, UserManager userManager) {
+        Map<String, Serializable> query = new HashMap<>();
+        log.info(group);
+        query.put(userManager.getGroupIdField(), group);
+        DocumentModelList groups = userManager.searchGroups(query, null);
+        log.info(groups.isEmpty());
+        if (groups.isEmpty()) {
+            return null;
+        }
+        log.info(groups.get(0).getId());
+        log.info(groups.size());
+        log.info(groups.get(0).getType());
+        return groups.get(0);
+    }
     protected String generateRandomUserId() {
         String userId = null;
 

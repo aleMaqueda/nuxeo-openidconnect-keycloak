@@ -5,6 +5,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.Key;
 import org.nuxeo.ecm.platform.oauth2.openid.auth.OpenIDUserInfo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -180,6 +181,9 @@ public class KeycloakUserInfo extends GenericJson implements OpenIDUserInfo {
     }
 
     public List<String> getGroups() {
+        for (int i = 0; i < groups.size(); i++){
+            groups.set(i,groups.get(i).replaceAll("/", ""));
+        }
         return groups;
     }
 
