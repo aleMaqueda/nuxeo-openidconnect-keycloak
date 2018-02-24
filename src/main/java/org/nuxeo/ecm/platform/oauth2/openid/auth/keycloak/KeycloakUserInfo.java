@@ -11,6 +11,8 @@ import java.util.List;
 
 public class KeycloakUserInfo extends GenericJson implements OpenIDUserInfo {
 
+    protected static String membersname = "members";
+
     @Key("user-client-role")
     protected List<String> roles;
 
@@ -181,8 +183,15 @@ public class KeycloakUserInfo extends GenericJson implements OpenIDUserInfo {
     }
 
     public List<String> getGroups() {
+        boolean members = false;
         for (int i = 0; i < groups.size(); i++){
             groups.set(i,groups.get(i).replaceAll("/", ""));
+            if(groups.get(i).equals(membersname)){
+                members = true;
+            }
+        }
+        if(!members){
+            groups.add(membersname);
         }
         return groups;
     }

@@ -77,11 +77,7 @@ public abstract class UserResolver {
     private DocumentModel updateUser(DocumentModel userDoc, OpenIDUserInfo userInfo, UserManager userManager) {
         log.info(provider.getName());
         try {
-            log.debug(userInfo.getName());
             log.info(userInfo.getGivenName());
-            log.info(userInfo.getGroups().toArray().length);
-            log.info(userInfo.getRoles().toArray().length);
-            //UserManager userManager = Framework.getLocalService(UserManager.class);
             userDoc.setProperty(userSchemaName, "firstName", userInfo.getGivenName());
             userDoc.setProperty(userSchemaName, "lastName", userInfo.getFamilyName());
             userDoc.setProperty(userSchemaName, "groups", userInfo.getGroups());
@@ -138,9 +134,7 @@ public abstract class UserResolver {
             groupDoc.setProperty(groupSchemaName, userManager.getGroupMembersField(), users);
             userManager.updateGroup(groupDoc);
         }
-        log.info(groupDoc.getName());
-        log.info(groupDoc.getId());
-        log.info(groupDoc.toString());
+
         return groupDoc;
     }
     private DocumentModel findGroup(String group, UserManager userManager) {
@@ -152,9 +146,7 @@ public abstract class UserResolver {
         if (groups.isEmpty()) {
             return null;
         }
-        log.info(groups.get(0).getId());
         log.info(groups.size());
-        log.info(groups.get(0).getType());
         return groups.get(0);
     }
     protected String generateRandomUserId() {
