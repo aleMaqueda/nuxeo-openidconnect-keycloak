@@ -117,7 +117,7 @@ public class OpenIDConnectAuthenticator implements NuxeoAuthenticationPlugin {
             if (accessToken == null) {
                 return null;
             }
-
+            log.info(accessToken);
             OpenIDUserInfo info = provider.getUserInfo(accessToken);
 
             // Store the user info as a key in the request so apps can use it

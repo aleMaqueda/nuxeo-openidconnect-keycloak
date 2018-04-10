@@ -110,6 +110,12 @@ public class OpenIDUserInfoStoreImpl implements OpenIDUserInfoStore {
             if (entry == null) {
                 return null;
             }
+            log.info(session.isAuthenticating());
+            log.info(entry.getSessionId());
+            log.info(entry.getName());
+            log.info(entry.getChangeToken());
+            log.info(entry.getTitle());
+            log.info(entry.getRepositoryName());
             return (String) entry.getPropertyValue(SCHEMA_NAME + ":" + NUXEO_LOGIN_KEY);
         } catch (PropertyNotFoundException e) {
             log.error("Error retrieving OpenID user info", e);

@@ -184,11 +184,17 @@ public class KeycloakUserInfo extends GenericJson implements OpenIDUserInfo {
 
     public List<String> getGroups() {
         boolean members = false;
-        for (int i = 0; i < groups.size(); i++){
-            groups.set(i,groups.get(i).replaceAll("/", ""));
-            if(groups.get(i).equals(membersname)){
-                members = true;
+        if(groups != null){
+            if(groups.size() > 0){
+                for (int i = 0; i < groups.size(); i++){
+                    groups.set(i,groups.get(i).replaceAll("/", ""));
+                    if(groups.get(i).equals(membersname)){
+                        members = true;
+                    }
+                }
             }
+        }else{
+            groups = new ArrayList<>();
         }
         if(!members){
             groups.add(membersname);
