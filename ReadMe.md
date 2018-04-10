@@ -1,4 +1,3 @@
-
 ## About nuxeo-platform-login-openid 9.2
 
 This module contribute a new Login Plugin that can use OpenId to authenticate the user.
@@ -43,7 +42,7 @@ Change definition resources/OSGI-INF/openid-keycloak-contrib.xml
 		    <tokenServerURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/token</tokenServerURL>
 		    <userInfoURL>http://localhost:9080/auth/realms/jhipster/protocol/openid-connect/userinfo</userInfoURL>
 		    <scope>openid</scope>
-		    <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.DefaultOpenIDUserInfo</userInfoClass>
+		    <userInfoClass>org.nuxeo.ecm.platform.oauth2.openid.auth.keycloak.KeycloakUserInfo</userInfoClass>
 		</provider>
 	    </extension>
 	</component>
@@ -52,17 +51,13 @@ In nuxeo server:
 
 Declare in "templates/openid/nuxeo.defaults"
 
-nuxeo.openid.keycloak.client.id=
-
-
-nuxeo.openid.keycloak.secret.id=
+    nuxeo.openid.keycloak.client.id=
+    nuxeo.openid.keycloak.secret.id=
 
 
 You must first declare your Nuxeo Web Application to Keycloak so that you can get the clientId and ClientSecret.
 
 templates/openid/config/openid-login-config.xml.nxftl
-
-packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-config.xml.nxftl
 
 
     <#if "${nuxeo.openid.keycloak.client.id}" != "">
@@ -76,13 +71,11 @@ packages/store/openid-authentication-1.2.1/templates/openid/config/openid-login-
       </extension>
     </#if>
 
-In "nuxeo.conf" and "nxserver/config/configuration.properties":
+In "nuxeo.conf":
 
-nuxeo.openid.keycloak.client.id=${nuxeo-client}
-
-nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
-
-nuxeo.oauth.auth.create.user=true
+    nuxeo.openid.keycloak.client.id=${nuxeo-client}
+    nuxeo.openid.keycloak.secret.id=${nuxeo-secret}
+    nuxeo.oauth.auth.create.user=true
 
 Replace nuxeo-platform-login-openid-9.2.jar in:
 
@@ -91,4 +84,3 @@ Replace nuxeo-platform-login-openid-9.2.jar in:
 - packages/store/openid-authentication-1.2.1/install/bundles
 
 - packages/backup/nxserver/bundles
-
